@@ -14,7 +14,7 @@ class SqlControl:
 
     def close_sf_conn(self):
         self.sf_conn.commit()    #commit sfdata
-        self.sf_conn.close()      #conn of sfdata close
+        self.sf_conn.close()     #conn of sfdata close
 
     def open_commodity_conn(self):
         self.com_conn = sqlite3.connect(self.commodity_db_path)   #conn of sfdata open
@@ -22,4 +22,4 @@ class SqlControl:
 
     def close_commodity_conn(self):
         self.com_conn.commit()    #commit sfdata
-        self.com_conn.close()      #conn of sfdata close
+        self.com_conn.close()     #conn of sfdata close
