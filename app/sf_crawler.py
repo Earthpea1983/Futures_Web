@@ -1,34 +1,27 @@
 from datetime import datetime
 from pandas import date_range
 import sqlite3
-import settings
 import requests as rq
 from lxml import etree
 import numpy as np
 import pandas as pd
 from numpy.random import randint
 from time import sleep
+from sql_control import SqlControl
 
-class Crawler:
+
+class Crawler(SqlControl):
+
     def __init__(self):
-        BASE_DIR = settings.base_dir()    #Futures_Web DIR path
-        self.sfdata_db_path = BASE_DIR + '/database' + '/Sfdata.db'      # database path
-        self.open_conn()  # open database
+        SqlControl.__init__(self)
+        SqlControl.open_sf_conn(self)  # open database
         dateList = self.create_datelist()   #  create date list since 2017-10-9
         dateList = self.modify_datelist(dateList)  #  return dateList except already in sf database
         urlList = self.create_urllist(dateList)   #turn the date list to url list of 100ppi website
         self.crawl(urlList, dateList)
-        self.close_conn()  # subbmit and close database
+        SqlControl.close_sf_conn(self)  # subbmit and close database
         print("Mission completed!")
         input("Press any key to ESC.")
-
-    def open_conn(self):
-        self.sf_conn = sqlite3.connect(self.sfdata_db_path)   #conn of sfdata open
-        self.sf_cursor = self.sf_conn.cursor()
-
-    def close_conn(self):
-        self.sf_conn.commit()    #commit sfdata
-        self.sf_conn.close()      #conn of sfdata close
 
     #create table with tbName
     def create_table(self, tbName):
