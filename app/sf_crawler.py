@@ -18,7 +18,7 @@ class Crawler:
         dateList = self.modify_datelist(dateList)  #  return dateList except already in sf database
         urlList = self.create_urllist(dateList)   #turn the date list to url list of 100ppi website
         self.crawl(urlList, dateList)
-        self.close_conn(urlList)  # subbmit and close database
+        self.close_conn()  # subbmit and close database
         print("Mission completed!")
         input("Press any key to ESC.")
 
@@ -26,9 +26,8 @@ class Crawler:
         self.sf_conn = sqlite3.connect(self.sfdata_db_path)   #conn of sfdata open
         self.sf_cursor = self.sf_conn.cursor()
 
-    def close_conn(self, urlList):
-        if not self.empty_flag(urlList):  # if not all page return empyt page, then commit
-            self.sf_conn.commit()    #commit sfdata
+    def close_conn(self):
+        self.sf_conn.commit()    #commit sfdata
         self.sf_conn.close()      #conn of sfdata close
 
     #create table with tbName
@@ -136,13 +135,8 @@ class Crawler:
         timeTo = 20
         sleep(randint(timeFrom, timeTo))
 
-    def empty_flag(self, urlList):  #  when commit empty data to sqlite, error occur, use this flag to avoid empty commit
-        dateLen = len(urlList)
-        return self.empty_count == dateLen   # if all url get empty date, then true
-
     def crawl(self, urlList, dateList):
         print("Ready to crawl!")
-        self.empty_count = 0  #  count how many page empty for empty flag function
         for ind in range(len(urlList)):
             # time interval to avoid being ban by website.
             if ind != 0:  #except the first crawl
@@ -150,7 +144,6 @@ class Crawler:
             print("Crawling:\t" + urlList[ind] + "\t---->\t", end='')  #print the url line, not new line next
             # if page empty then pass
             if self.check_empty(urlList[ind]):  # page with "暂无数据", then next url
-                self.empty_count += 1   # count how many page empty for empty flag fucntion
                 print("PASS.")
                 continue
             tbName = 'sf' + dateList[ind].replace('-', '')  # turn the date form '2017-10-09' to 'sf20171009' as table name
