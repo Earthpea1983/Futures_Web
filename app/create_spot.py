@@ -10,14 +10,14 @@ class Spot(SqlControl):
         SqlControl.open_sf_conn(self)
         #Commodity database
         SqlControl.open_commodity_conn(self)
-        spot_tb_name = 'spot'
+        self.spot_tb_name = 'spot'
         #------------------------------------------------------------------------------------------
         sfTbList = self.table_list()  # table name list from sf database
         tbName = sfTbList[-1] # last table of sf
         spotList = self.get_spot_name(tbName)
-        self.create_spot_tb(spot_tb_name, spotList, sfTbList)  # create the commodity db
-        self.insert_commodity(spot_tb_name, spotList, sfTbList)
-        self.storage_spot_to_excel(spot_tb_name)  #read spot db and to excel
+        self.create_spot_tb(spotList, sfTbList)  # create the commodity db
+        self.insert_commodity(spotList, sfTbList)
+        self.storage_spot_to_excel()  #read spot db and to excel
         #------------------------------------------------------------------------------------------
         #close server
         SqlControl.close_commodity_conn(self)
@@ -31,8 +31,8 @@ class Spot(SqlControl):
             tbList[i] = tbList[i][0]
         return tbList
 
-    def create_spot_tb(self, spot_tb_name, spotList, sfTbList):
-        tbName = spot_tb_name # name of the table with all commodity.
+    def create_spot_tb(self, spotList, sfTbList):
+        tbName = self.spot_tb_name # name of the table with all commodity.
         #check if table existed than delete the table
         if self.check_table(tbName):
             sqlDrop = "DROP TABLE {0};".format(tbName)
@@ -70,7 +70,7 @@ class Spot(SqlControl):
         else:
             return False
 
-    def insert_commodity(self, spot_tb_name, spotList, sfTbList):
+    def insert_commodity(self, spotList, sfTbList):
         # loop for all sf tables
         for sf in sfTbList:
             # get table date time as string, in order to store into the spot list
@@ -84,15 +84,15 @@ class Spot(SqlControl):
                 spotPrice = spotPrice[0][0]
                 # insert price to spot table
                 # inser into table spot (商品名称) values (商品价格) by update
-                sqlInsert = "UPDATE {0} SET '{1}' = {2} WHERE 日期 = '{3}';".format(spot_tb_name, sp, spotPrice, dateTime)
+                sqlInsert = "UPDATE {0} SET '{1}' = {2} WHERE 日期 = '{3}';".format(self.spot_tb_name, sp, spotPrice, dateTime)
                 self.com_cursor.execute(sqlInsert)
 
-    def storage_spot_to_excel(self, spot_tb_name):
+    def storage_spot_to_excel(self):
         sqlReadSpot = "SELECT * FROM spot"
         dfContent = pd.read_sql(sqlReadSpot, self.com_conn)
         excel_path = "{0}/database/SpotData.xlsx".format(self.BASE_DIR)
-        print(excel_path)
         dfContent.to_excel(excel_path)
+
 
 if __name__ == '__main__':
     a = Spot()

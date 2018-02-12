@@ -8,7 +8,7 @@ class ThirtyThree(SqlControl):
     def __init__(self):
         SqlControl.__init__(self)
         BASE_DIR = settings.base_dir()
-        excel_path = "{0}/database/Suggestion.xlsx".format(BASE_DIR)
+        self.excel_path = "{0}/database/Suggestion.xlsx".format(BASE_DIR)
         day = 33 # to get the 33day for calculation
         #sql start
         SqlControl.open_commodity_conn(self)
@@ -50,8 +50,8 @@ class ThirtyThree(SqlControl):
                 res[colName] = 0
         return res
 
-    def storage_to_excel(self,res):
-        res.to_excel(r"C:\Users\Mike\Documents\Com_Ex\spot.xlsx")
+    def storage_to_excel(self, res):
+        res.to_excel(self.excel_path)
 
 
 if __name__ == '__main__':
