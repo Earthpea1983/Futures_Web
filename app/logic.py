@@ -1,28 +1,32 @@
 import sqlite3
 import pandas as pd
+import settings
+from sql_control import SqlControl
 
 
-class ThirtyThree:
+class ThirtyThree(SqlControl):
     def __init__(self):
+        SqlControl.__init__(self)
+        BASE_DIR = settings.base_dir()
+        excel_path = "{0}/database/Suggestion.xlsx".format(BASE_DIR)
         day = 33 # to get the 33day for calculation
         #sql start
-        prodConn = sqlite3.connect("D:\MyRepository\Futures\Commodity.db")  # server name and location.
-        prodC = prodConn.cursor()
+        SqlControl.open_commodity_conn(self)
         #----------------------------------------------------------------------------------------------------------
-        spot = self.get_spot(prodConn)
+        spot = self.get_spot()
         res = self.judge_spot(spot, day)  # -1 for going down, 1 for up, 0 for ignore
         res = pd.DataFrame.from_dict(res, orient='index')
         res = res[res.iloc[:, 0] != 0]
         self.storage_to_excel(res)
         #-----------------------------------------------------------------------------------------------------------
         #sql stop
-        prodConn.close() # not modified the db, so no commit
+        SqlControl.close_commodity_conn(self)
         print("Suggestion has been made!")
 
 
-    def get_spot(self, prodConn):
+    def get_spot(self):
         sql = "SELECT * FROM spot"
-        spot = pd.read_sql(sql, prodConn)
+        spot = pd.read_sql(sql, self.com_conn)
         return spot
 
     def judge_spot(self, spot, day):

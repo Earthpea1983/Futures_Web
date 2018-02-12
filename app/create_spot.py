@@ -12,23 +12,21 @@ class Spot(SqlControl):
         SqlControl.open_commodity_conn(self)
         spot_tb_name = 'spot'
         #------------------------------------------------------------------------------------------
-        sfTbList = self.table_list(self.sf_cursor)  # table name list from sf database
+        sfTbList = self.table_list()  # table name list from sf database
         tbName = sfTbList[-1] # last table of sf
-        spotList = self.get_spot_name(self.sf_cursor, tbName)
+        spotList = self.get_spot_name(tbName)
         self.create_spot_tb(spot_tb_name, spotList, sfTbList)  # create the commodity db
         self.insert_commodity(spot_tb_name, spotList, sfTbList)
         self.storage_spot_to_excel(spot_tb_name)  #read spot db and to excel
         #------------------------------------------------------------------------------------------
         #close server
-        sf_conn.commit()
-        sf_conn.close()
-        self.com_conn.commit()
-        self.com_conn.close()
+        SqlControl.close_commodity_conn(self)
+        SqlControl.close_sf_conn(self)
         print("Spot table created!")
 
     #return table name string in list
-    def table_list(self, sfc):
-        tbList = sfc.execute("SELECT name FROM sqlite_master WHERE type='table'order by name;").fetchall()
+    def table_list(self):
+        tbList = self.sf_cursor.execute("SELECT name FROM sqlite_master WHERE type='table'order by name;").fetchall()
         for i in range(len(tbList)):
             tbList[i] = tbList[i][0]
         return tbList
@@ -53,10 +51,10 @@ class Spot(SqlControl):
             sqlDate = "INSERT INTO {0} ('日期') VALUES ({1});".format(tbName, dateTime)
             self.com_cursor.execute(sqlDate)
 
-    def get_spot_name(self, sfc, tbName):
+    def get_spot_name(self, tbName):
         #read the lastest database and return the name list of spot
         sql = "SELECT 商品 from {0};".format(tbName)
-        spotList = sfc.execute(sql).fetchall()
+        spotList = self.sf_cursor.execute(sql).fetchall()
         for i in range(len(spotList)):
             spotList[i] = spotList[i][0]
         return spotList
@@ -92,7 +90,8 @@ class Spot(SqlControl):
     def storage_spot_to_excel(self, spot_tb_name):
         sqlReadSpot = "SELECT * FROM spot"
         dfContent = pd.read_sql(sqlReadSpot, self.com_conn)
-        excel_path = "r\"{0}/database/SpotData.xlsx\"".format(self.BASE_DIR)
+        excel_path = "{0}/database/SpotData.xlsx".format(self.BASE_DIR)
+        print(excel_path)
         dfContent.to_excel(excel_path)
 
 if __name__ == '__main__':
