@@ -13,6 +13,7 @@ from sql_control import SqlControl
 class Crawler(SqlControl):
 
     def __init__(self):
+        print("Start to crawl.")
         SqlControl.__init__(self)
         SqlControl.open_sf_conn(self)  # open database
         dateList = self.create_datelist()   #  create date list since 2017-10-9
@@ -20,8 +21,7 @@ class Crawler(SqlControl):
         urlList = self.create_urllist(dateList)   #turn the date list to url list of 100ppi website
         self.crawl(urlList, dateList)
         SqlControl.close_sf_conn(self)  # subbmit and close database
-        print("Mission completed!")
-        input("Press any key to ESC.")
+        print("Data downloaded!")
 
     #create table with tbName
     def create_table(self, tbName):

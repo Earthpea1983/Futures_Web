@@ -6,6 +6,7 @@ from sql_control import SqlControl
 
 class ThirtyThree(SqlControl):
     def __init__(self):
+        print("Suggestion on the way.")
         SqlControl.__init__(self)
         BASE_DIR = settings.base_dir()
         self.excel_path = "{0}/database/Suggestion.xlsx".format(BASE_DIR)
@@ -22,7 +23,9 @@ class ThirtyThree(SqlControl):
         #sql stop
         SqlControl.close_commodity_conn(self)
         print("Suggestion has been made!")
-
+        print("="*20)
+        print(res)
+        print("="*20)
 
     def get_spot(self):
         sql = "SELECT * FROM spot"

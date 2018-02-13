@@ -1,9 +1,9 @@
-import sqlite3
 import pandas as pd
 from sql_control import SqlControl
 
 class Spot(SqlControl):
     def __init__(self):
+        print("Start to create spot.")
         # server start
         #sf database
         SqlControl.__init__(self)

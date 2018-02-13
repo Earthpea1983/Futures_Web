@@ -6,16 +6,18 @@ import pygal
 class PlotFigure(SqlControl):
 
     def __init__(self):
+        print("Figure plotting, please wait.")
         SqlControl.__init__(self)
         self.figure_dir = settings.base_dir() + "/figure"   #figure document location
         SqlControl.open_commodity_conn(self)
-        self.spot_tb_name = "spot"# spot table name         # the commodity table name
-        spot = self.get_spot_name()                         # to get the commodity spot name
+        spot_tb_name = "spot"# spot table name         # the commodity table name
+        spot = self.get_spot_name(spot_tb_name)                         # to get the commodity spot name
         self.plot_figure(spot)                              # use pygal to plot all the spot
         SqlControl.close_commodity_conn(self)
+        print("Figures have been plotted.")
 
-    def get_spot_name(self):
-        sql = "SELECT * FROM {0}".format(self.spot_tb_name)
+    def get_spot_name(self, spot_tb_name):
+        sql = "SELECT * FROM {0}".format(spot_tb_name)
         spot = pandas.read_sql(sql, self.com_conn)
         return spot
 
