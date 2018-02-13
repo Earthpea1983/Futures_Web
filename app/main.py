@@ -12,7 +12,6 @@ class Main:
         os.system("python3 {0}/plot_figure.py".format(app_dir))
         print("Program closed.")
         os.system("nautilus {0}".format(BASE_DIR + "/figure"))
-        os.system("nautilus {0}".format(BASE_DIR + "/database"))
 
 
 if __name__ == "__main__":
