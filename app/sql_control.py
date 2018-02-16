@@ -5,8 +5,8 @@ class SqlControl:
 
     def __init__(self):
         self.BASE_DIR = settings.base_dir()    #Futures_Web DIR path
-        self.sfdata_db_path = self.BASE_DIR + '/database' + '/Sfdata.db'      # database path of sf data
-        self.commodity_db_path = self.BASE_DIR + '/database' + '/Commodity.db'  # database path of commodity
+        self.sfdata_db_path = self.BASE_DIR + '\\database' + '\\Sfdata.db'      # database path of sf data
+        self.commodity_db_path = self.BASE_DIR + '\\database' + '\\Commodity.db'  # database path of commodity
 
     def open_sf_conn(self):
         self.sf_conn = sqlite3.connect(self.sfdata_db_path)   #conn of sfdata open
