@@ -11,8 +11,6 @@ class Main:
         os.system("python {0}/logic.py".format(app_dir))
         os.system("python {0}/plot_figure.py".format(app_dir))
         print("Program closed.")
-        os.system("explorer {0}".format(BASE_DIR + "/figure"))
-
 
 if __name__ == "__main__":
     go = Main()
