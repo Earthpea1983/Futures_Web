@@ -90,7 +90,7 @@ class Spot(SqlControl):
     def storage_spot_to_excel(self):
         sqlReadSpot = "SELECT * FROM spot"
         dfContent = pd.read_sql(sqlReadSpot, self.com_conn)
-        excel_path = "{0}\\database\\SpotData.xlsx".format(self.BASE_DIR)
+        excel_path = "{0}/database/SpotData.xlsx".format(self.BASE_DIR)
         dfContent.to_excel(excel_path)
 
 

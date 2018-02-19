@@ -9,7 +9,7 @@ class ThirtyThree(SqlControl):
         print("Suggestion on the way.")
         SqlControl.__init__(self)
         BASE_DIR = settings.base_dir()
-        self.excel_path = "{0}\\database\\Suggestion.xlsx".format(BASE_DIR)
+        self.excel_path = "{0}/database/Suggestion.xlsx".format(BASE_DIR)
         day = 33 # to get the 33day for calculation
         #sql start
         SqlControl.open_commodity_conn(self)
