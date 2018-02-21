@@ -11,6 +11,7 @@ class Main:
         os.system("python {0}/logic.py".format(app_dir))
         os.system("python {0}/plot_figure.py".format(app_dir))
         print("Program closed.")
+        input("Any key to exit.")
 
 if __name__ == "__main__":
     go = Main()
