@@ -53,6 +53,7 @@ class ThirtyThree(SqlControl):
         res = res[res.iloc[:, 0] != 0]                   #filtrate the result only fullfil the terms
         return res
 
+
     def judge_spot(self, spot, day):
         spot = spot.tail(day)  # 33 days dataframe since today
         columns = [column for column in spot][1::]  # name of column in df, excluding "日期"
