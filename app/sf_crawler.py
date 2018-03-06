@@ -103,7 +103,7 @@ class Crawler(SqlControl):
         #cal the jicha
         jc = pd.DataFrame((dfContent["现货价格"]-dfContent["期货价格"])/dfContent["现货价格"]*100,columns=['基差'])
         dfContent = pd.concat([dfContent,jc],axis=1) #concat the result of jc to the dataframe
-        #cal the limitation to the 180 avr
+        #cal the limitation to the 180 avr, it's and (abs) value
         limitation = np.array(np.zeros(len(dfContent["现货价格"]))) # use np array for append
         for i in range(len(dfContent["现货价格"])):       #loop to see if the jicha is possity or negative to define the divide
             if dfContent.ix[i,"基差"] < 0:
